@@ -1,7 +1,7 @@
 // 只快取網站本身的檔案，讓主畫面 App 開得更快。
 // 商品與訂單資料都直接向 Supabase 取得，這裡不會碰到，也不會存到手機。
-const CACHE = 'preorder-701822d446';
-const SHELL = ["./","./index.html","./app-CJ7ETCRN.js","./app-Y3L5A6BI.css","./config.js","./manifest.webmanifest","./icons/icon-192.png"];
+const CACHE = 'preorder-893622016b';
+const SHELL = ["./","./index.html","./app-SGMF77YU.js","./app-WFTINGY6.css","./config.js","./manifest.webmanifest","./icons/icon-192.png"];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
