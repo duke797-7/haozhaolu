@@ -1,0 +1,29 @@
+/* 體驗版專用的切換列 */
+.demo-bar {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 30;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 12px;
+  padding: 6px var(--gutter);
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.8125rem;
+}
+.demo-bar p { min-width: 0; }
+.demo-bar div { display: flex; gap: 6px; }
+.demo-bar button {
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1.5px solid rgb(255 255 255 / 40%);
+  color: #fff;
+  font-weight: 700;
+}
+.demo-bar button[aria-pressed='true'] { background: var(--tape); border-color: var(--tape); color: var(--ink); }
+.store-head { position: static; }
+.editor-head { top: 90px; }
+@media (min-width: 420px) { .editor-head { top: 52px; } }

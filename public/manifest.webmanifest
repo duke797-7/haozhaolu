@@ -1,0 +1,16 @@
+{
+  "name": "預購管理",
+  "short_name": "預購管理",
+  "description": "上架商品、接收預購、整理訂單",
+  "lang": "zh-Hant-TW",
+  "start_url": "./#/admin",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f1f4f9",
+  "theme_color": "#10234f",
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "./icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
