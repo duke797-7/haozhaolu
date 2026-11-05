@@ -406,6 +406,9 @@ export function Thanks() {
       <main className="page page-slip">
         <Steps current={3} />
         <section className="slip">
+          <span className="ok-badge" aria-hidden="true">
+            <Icon name="check" />
+          </span>
           <h1>預購成功</h1>
           <p className="thanks-label">訂單編號</p>
           <p className="thanks-no" data-testid="order-no">
@@ -617,15 +620,15 @@ function ProductCard({ card, now }: { card: PublicCard; now: number }) {
         <span className="shop-photo">
           {card.cover && <img src={imageUrl(card.cover)} alt="" loading="lazy" />}
           {flag && <span className="shop-flag">{flag}</span>}
+          {card.phase === 'open' && !card.sold_out && (
+            <span className="shop-clock">
+              再 {remainingText(left)}結單
+              {card.remaining !== null && card.remaining <= 10 && `，剩 ${card.remaining} 件`}
+            </span>
+          )}
         </span>
         <span className="shop-title">{card.name}</span>
         <span className="shop-price">{priceRange(card.min_price, card.max_price)}</span>
-        {card.phase === 'open' && !card.sold_out && (
-          <span className="shop-clock">
-            再 {remainingText(left)}結單
-            {card.remaining !== null && card.remaining <= 10 && `，剩 ${card.remaining} 件`}
-          </span>
-        )}
       </a>
     </li>
   );
@@ -691,6 +694,20 @@ export function ShopHome() {
     return (
       <>
         <Hero card={featured} shop={shop} now={now} />
+        <ul className="perks perks-home">
+          <li>
+            <Icon name="wallet" />
+            先預購不用付款
+          </li>
+          <li>
+            <Icon name="mail" />
+            到貨 Email 通知
+          </li>
+          <li>
+            <Icon name="store" />
+            7-ELEVEN 取貨付款
+          </li>
+        </ul>
         <main className="store-main">
           <Shelf title="預購中" cards={cards.filter((c) => c.phase === 'open')} now={now} />
           <Shelf title="即將開放" cards={cards.filter((c) => c.phase === 'upcoming')} now={now} />

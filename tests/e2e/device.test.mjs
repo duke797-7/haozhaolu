@@ -194,7 +194,11 @@ console.log('\nPWA');
 
   const active = await page.evaluate(async () => {
     const reg = await navigator.serviceWorker.ready;
-    return reg.active?.state;
+    const worker = reg.active;
+    if (worker.state !== 'activated') {
+      await new Promise((done) => worker.addEventListener('statechange', () => worker.state === 'activated' && done()));
+    }
+    return worker.state;
   });
   ok(active === 'activated', 'Service Worker 已啟用', active);
   await page.reload();

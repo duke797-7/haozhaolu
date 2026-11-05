@@ -8,15 +8,15 @@ const sharp = require('sharp');
 const out = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../public/icons');
 
 const art = (s) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="${s}" height="${s}">
-  <rect width="512" height="512" fill="#10234f"/>
+  <rect width="512" height="512" fill="#7a0f26"/>
   <g transform="rotate(-8 256 256)">
-    <rect x="-40" y="186" width="592" height="140" fill="#ffd23f"/>
-    <rect x="-40" y="186" width="592" height="5" fill="#e9b800"/>
-    <rect x="-40" y="321" width="592" height="5" fill="#e9b800"/>
+    <rect x="-40" y="186" width="592" height="140" fill="#f0cf7a"/>
+    <rect x="-40" y="186" width="592" height="5" fill="#c9a24a"/>
+    <rect x="-40" y="321" width="592" height="5" fill="#c9a24a"/>
     <g stroke="#ffffff" stroke-opacity=".28" stroke-width="7">
       ${Array.from({ length: 16 }, (_, i) => `<path d="M${-30 + i * 40} 191V321"/>`).join('')}
     </g>
-    <path d="M196 256l44 44 84-92" fill="none" stroke="#10234f" stroke-width="34" stroke-linecap="square"/>
+    <path d="M196 256l44 44 84-92" fill="none" stroke="#7a0f26" stroke-width="34" stroke-linecap="square"/>
   </g>
 </svg>`;
 

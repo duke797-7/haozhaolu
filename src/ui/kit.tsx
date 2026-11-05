@@ -10,6 +10,7 @@ const ICONS = {
   wallet: 'M3 7h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 7l13-3v3M16 13h2',
   mail: 'M3 6h18v12H3zM3 7l9 7 9-7',
   store: 'M4 10v10h16V10M3 10l2-6h14l2 6zM10 20v-6h4v6',
+  check: 'M5 12.5l4.5 4.5L19 7.5',
 };
 
 export type IconName = keyof typeof ICONS;
