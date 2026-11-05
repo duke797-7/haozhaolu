@@ -134,6 +134,13 @@ export interface ArrivalList {
   notified_count: number;
 }
 
+export interface ScanResult {
+  name: string;
+  description: string;
+  variants: { label: string; price: number | null }[];
+  notice?: string;
+}
+
 export interface OrderPage {
   total: number;
   rows: AdminOrder[];

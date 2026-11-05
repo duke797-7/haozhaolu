@@ -1,3 +1,5 @@
+import type { ScanResult } from './types';
+
 // 與 Supabase 溝通的唯一入口。只用瀏覽器內建的 fetch，不需要額外套件。
 // 這裡只會用到可公開的 publishable（舊稱 anon）key，放在 apikey 標頭；
 // Authorization 標頭只放管理員登入後的權杖。secret / service_role key 絕對不能放進前端。
@@ -175,6 +177,27 @@ export async function rpc<T>(fn: string, args: Record<string, unknown> = {}, adm
     throw new ApiError(friendly ? data.message : '操作沒有完成，請稍後再試', res.status, data?.hint ?? null);
   }
   return data as T;
+}
+
+/** 把商品照片交給後端辨識，回傳建議的名稱、介紹與規格。AI 金鑰只存在後端。 */
+export async function scanProduct(blob: Blob): Promise<ScanResult> {
+  const token = await validToken();
+  if (!token) throw new ApiError('登入已過期，請重新登入', 401);
+  const image = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result).split(',')[1] ?? '');
+    reader.onerror = () => reject(new ApiError('照片讀取失敗，請再試一次'));
+    reader.readAsDataURL(blob);
+  });
+  const res = await request(`${BASE}/functions/v1/scan-product`, {
+    method: 'POST',
+    headers: { apikey: KEY, Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ image, mime: blob.type }),
+  });
+  const data = await parse(res);
+  if (res.status === 404) throw new ApiError('拍照辨識尚未開通', 404);
+  if (!res.ok) throw new ApiError(data?.message ?? '辨識沒有完成，請再試一次或手動填寫', res.status);
+  return data as ScanResult;
 }
 
 export const imageUrl = (path: string) => `${BASE}/storage/v1/object/public/${BUCKET}/${path}`;

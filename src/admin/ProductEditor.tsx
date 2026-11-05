@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { imageUrl, removeImages, rpc, uploadImage, uuid } from '../api';
+import { imageUrl, removeImages, rpc, scanProduct, uploadImage, uuid } from '../api';
 import { fromInput, hoursFromNow, money, toInput } from '../format';
 import { compressImage } from '../image';
 import { go, productUrl } from '../router';
 import type { AdminProduct, ProductStatus } from '../types';
-import { Confirm, Dialog, Failure, Loading, copyText, shareLink, useToast } from '../ui/kit';
+import { Confirm, Dialog, Failure, Icon, Loading, copyText, shareLink, useToast } from '../ui/kit';
 
 const MAX_PHOTOS = 10;
 
@@ -60,6 +60,10 @@ export function ProductEditor({ id }: { id: string | null }) {
   const [published, setPublished] = useState<{ name: string; slug: string } | null>(null);
   const addInput = useRef<HTMLInputElement>(null);
   const swapInput = useRef<HTMLInputElement>(null);
+  const cameraInput = useRef<HTMLInputElement>(null);
+  const albumInput = useRef<HTMLInputElement>(null);
+  const [scanned, setScanned] = useState(false);
+  const [scanNotice, setScanNotice] = useState('');
 
   useEffect(() => {
     let alive = true;
@@ -151,6 +155,41 @@ export function ProductEditor({ id }: { id: string | null }) {
     setPhotos((list) => [...list, ...added]);
     setBusy('');
     touch();
+  };
+
+  const scan = async (file: File | undefined) => {
+    if (!file) return;
+    setBusy('AI 辨識中');
+    setError('');
+    setScanned(false);
+    try {
+      const blob = await compressImage(file);
+      if (photos.length < MAX_PHOTOS) {
+        setPhotos((list) => [...list, { key: uuid(), path: null, blob, preview: URL.createObjectURL(blob) }]);
+      }
+      const result = await scanProduct(blob);
+      // 只填空白欄位，不覆蓋你已經打好的內容。
+      setDraft((d) =>
+        d && {
+          ...d,
+          name: d.name.trim() ? d.name : result.name,
+          description: d.description.trim() ? d.description : result.description,
+        }
+      );
+      const found = result.variants.map((v) => newVariant(v.price === null ? '' : String(v.price), '', v.label));
+      setVariants((list) => {
+        if (found.length === 0) return list;
+        const untouched = list.length === 1 && !list[0].id && list[0].price === '' && list[0].qty === '';
+        return untouched ? found : [...list, ...found];
+      });
+      setScanned(true);
+      setScanNotice(result.notice ?? '');
+      touch();
+      window.setTimeout(() => document.querySelector('.scan-note')?.scrollIntoView({ block: 'center' }), 50);
+    } catch (e) {
+      setError((e as Error).message);
+    }
+    setBusy('');
   };
 
   const swapPhoto = async (file: File | undefined) => {
@@ -302,6 +341,55 @@ export function ProductEditor({ id }: { id: string | null }) {
       </header>
 
       <main className="page">
+        {!id && (
+          <section className="scan-card" aria-label="拍照自動填寫">
+            <h2>拍照自動填寫</h2>
+            <p>拍商品或包裝，名稱、介紹和規格會自動帶入，你只要填數量。</p>
+            <div className="scan-actions">
+              <button type="button" className="btn btn-primary" disabled={!!busy} onClick={() => cameraInput.current?.click()}>
+                <Icon name="camera" />
+                {busy === 'AI 辨識中' ? busy : '拍照'}
+              </button>
+              <button type="button" className="btn btn-quiet" disabled={!!busy} onClick={() => albumInput.current?.click()}>
+                <Icon name="image" />
+                從相簿選
+              </button>
+            </div>
+            <input
+              ref={cameraInput}
+              data-testid="scan-camera"
+              className="file"
+              type="file"
+              accept="image/*"
+              capture="environment"
+              aria-label="拍攝商品照片"
+              onChange={(e) => {
+                void scan(e.target.files?.[0]);
+                e.target.value = '';
+              }}
+            />
+            <input
+              ref={albumInput}
+              data-testid="scan-album"
+              className="file"
+              type="file"
+              accept="image/*"
+              aria-label="從相簿選擇商品照片"
+              onChange={(e) => {
+                void scan(e.target.files?.[0]);
+                e.target.value = '';
+              }}
+            />
+          </section>
+        )}
+        {scanned && (
+          <div className="scan-note" role="status">
+            <strong>已自動填寫，請確認內容</strong>
+            <span>填好標示的欄位後，按下方「上架」。</span>
+            {scanNotice && <span className="scan-demo">{scanNotice}</span>}
+          </div>
+        )}
+
         <section aria-label="商品照片">
           <div className="photo-grid">
             {photos.map((photo, i) => (
@@ -397,7 +485,7 @@ export function ProductEditor({ id }: { id: string | null }) {
                 />
               </label>
               <div className="field-pair">
-                <label className="field">
+                <label className={`field${scanned && v.price === '' ? ' field-need' : ''}`}>
                   <span>售價（元）</span>
                   <input
                     type="number"
@@ -407,7 +495,7 @@ export function ProductEditor({ id }: { id: string | null }) {
                     onChange={(e) => setVariant(v.key, { price: e.target.value })}
                   />
                 </label>
-                <label className="field">
+                <label className={`field${scanned && v.qty === '' ? ' field-need' : ''}`}>
                   <span>可預購數量</span>
                   <input
                     type="number"

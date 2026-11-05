@@ -11,6 +11,8 @@ const ICONS = {
   mail: 'M3 6h18v12H3zM3 7l9 7 9-7',
   store: 'M4 10v10h16V10M3 10l2-6h14l2 6zM10 20v-6h4v6',
   check: 'M5 12.5l4.5 4.5L19 7.5',
+  camera: 'M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1zM12 16.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z',
+  image: 'M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM3.5 16l5-5 4 4 3-3 4.5 4.5M15.5 9.5h.01',
 };
 
 export type IconName = keyof typeof ICONS;

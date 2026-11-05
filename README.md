@@ -67,6 +67,14 @@ window.APP_CONFIG = {
 
 App 不會自動寄信，也看不到顧客是否已在賣貨便下單，請到賣貨便核對。
 
+## 拍照自動填寫
+
+後台「上架新商品」可以拍照或選照片，由 Gemini 帶入商品名稱、介紹與規格。後端程式在 `supabase/functions/scan-product/`。
+
+- 金鑰存放在 Supabase 的 Edge Functions > Secrets，名稱是 `GEMINI_API_KEY`，不會放進網站。
+- 預設模型是 `gemini-3.1-flash-lite`。要更換時，在 Secrets 新增 `GEMINI_MODEL`，不用改程式。Google 公告這個模型最早可能在 2027 年 5 月停用。
+- 只有管理員能呼叫。AI 帶入的內容要確認後才會上架。
+
 ## 上線後的驗收清單
 
 本機測試使用模擬環境，以下項目請在正式環境用真手機各做一次：

@@ -614,6 +614,20 @@ export async function rpc<T>(fn: string, args: Record<string, unknown> = {}): Pr
   return copy(call(fn, args)) as T;
 }
 
+// 體驗版沒有接 AI：等一下後回傳固定範例，只用來示範操作流程。
+export async function scanProduct(_blob: Blob) {
+  await new Promise((resolve) => setTimeout(resolve, 1200));
+  return {
+    name: '範例辨識結果：燙金吉祥紅包袋',
+    description: '加厚特種紙，燙金圖樣。\n可平放紙鈔，不需對折。',
+    variants: [
+      { label: '長款 9 × 17 公分', price: 120 },
+      { label: '方款 9 × 9 公分', price: null },
+    ],
+    notice: '體驗版：這是固定範例，沒有真的辨識你的照片。',
+  };
+}
+
 export const imageUrl = (path: string) => images[path] ?? '';
 
 export async function uploadImage(path: string, blob: Blob): Promise<void> {

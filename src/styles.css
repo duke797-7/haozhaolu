@@ -568,3 +568,17 @@ button:disabled { cursor: default; }
   .tabs { left: 50%; right: auto; width: 588px; margin-left: -294px; }
   .hero-link { max-width: 620px; }
 }
+
+/* 拍照自動填寫 */
+.scan-card { margin-bottom: 16px; padding: 16px; background: linear-gradient(160deg, #7a0f26, #a2152f); border-radius: 18px; color: #fff; box-shadow: var(--shadow-lift); }
+.scan-card h2 { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 900; color: var(--tape); }
+.scan-card p { margin-top: 2px; color: #f6dfe0; font-size: 0.9375rem; }
+.scan-actions { display: grid; grid-template-columns: 3fr 2fr; gap: 10px; margin-top: 12px; }
+.scan-actions .btn { gap: 8px; padding: 0 10px; }
+.scan-actions .btn-primary { background: linear-gradient(100deg, #e3c06a, #f6e3a1); color: #5e0b1d; box-shadow: none; }
+.scan-actions .btn-quiet { background: rgb(255 255 255 / 12%); border-color: rgb(255 255 255 / 45%); color: #fff; }
+.scan-note { display: grid; gap: 2px; margin-bottom: 14px; padding: 12px 14px; background: #fdf6e3; border: 1.5px solid var(--tape-edge); border-radius: 14px; font-size: 0.9375rem; }
+.scan-note strong { color: var(--navy); }
+.scan-demo { color: var(--muted); font-size: 0.8125rem; }
+.field-need > span { color: var(--navy); }
+.field-need input { border-color: var(--tape-edge); box-shadow: 0 0 0 2px rgb(240 207 122 / 70%); background: #fffdf5; }
