@@ -6,6 +6,8 @@
 ## 目前的正式環境
 
 - Supabase 專案：`preorder-app`（東京，免費方案），網址 `https://tcgcipmbepepzwkemkgv.supabase.co`
+- 網站：`https://duke797-7.github.io/haozhaolu/`（`gh-pages` 分支，推送後自動更新）
+- 後台：`https://duke797-7.github.io/haozhaolu/#/admin`
 - `dist/config.js` 已填好這個專案的連線資料。
 - 資料表、照片空間與多數函式已建立。還要到 SQL Editor 執行一次 `supabase/finish-setup.sql`，
   它會補上三個函式、開放權限，並把目前唯一的帳號設為管理員。
